@@ -22,6 +22,7 @@
     --mute:       #707070;
     --line:       rgba(11,11,11,0.14);
     --accent:     #e8552d;
+    --cursor-hover: #e8ff00;
 
     --font: "Arimo", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --maxw: 1240px;
@@ -443,17 +444,6 @@
     padding-bottom: clamp(.7rem, 1.6vw, 1rem);
     border-bottom: 1px solid var(--line);
   }
-  .badge-new {
-    display: inline-block;
-    margin-left: .5rem;
-    padding: .12rem .55rem;
-    border-radius: 999px;
-    background: var(--accent);
-    color: #fff;
-    font-family: var(--font); font-weight: 700;
-    font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
-    vertical-align: middle; line-height: 1.7;
-  }
   .slide__title {
     font-family: var(--font);
     font-weight: 700;
@@ -810,6 +800,12 @@
     padding: clamp(1.4rem, 3.5vw, 2rem) clamp(.4rem, 1.5vw, 1rem) 0;
     max-width: 58ch;
   }
+  .dexp__title {
+    margin: 0 0 .4rem;
+    font-family: var(--font); font-weight: 700;
+    font-size: clamp(1.2rem, 1rem + .8vw, 1.6rem);
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
   .dexp__cat {
     margin: 0;
     font-family: var(--font); font-weight: 500;
@@ -1085,11 +1081,11 @@
       transition: width .25s ease, height .25s ease, border-color .25s ease,
         opacity .25s ease, background-color .25s ease;
     }
-    body.cursor-hover .cursor--dot { background: var(--accent); width: 8px; height: 8px; }
+    body.cursor-hover .cursor--dot { background: var(--cursor-hover); width: 8px; height: 8px; }
     body.cursor-hover .cursor--ring {
       width: 54px; height: 54px;
-      border-color: var(--accent);
-      background: rgba(232, 85, 45, .08);
+      border-color: var(--cursor-hover);
+      background: rgba(232, 255, 0, .1);
       opacity: 1;
     }
   }
@@ -1151,7 +1147,7 @@
 
       <header class="phead arbeiten-head">
         <p class="phead__eyebrow" data-en="Work">Arbeiten</p>
-        <h2 class="spotlight" id="arbeitenSpotlight" data-en="Where technology meets creativity.">Wo Technik auf Kreativität trifft.</h2>
+        <h2 class="spotlight" id="arbeitenSpotlight" data-en="Where technology meets creativity - and projects come to life.">Wo Technik auf Kreativität trifft – und daraus Projekte entstehen.</h2>
       </header>
 
       <!-- VIDEO -->
@@ -1209,7 +1205,7 @@
               <article class="slide">
                 <div class="slide__meta">
                   <div>
-                    <h3 class="slide__title">03 Data Litrecy <span class="badge-new" data-en="New">Neu</span></h3>
+                    <h3 class="slide__title">03 Data Litrecy</h3>
                     <p class="slide__sub" data-en="Animation video">Animationsvideo</p>
                 <p class="slide__role" data-en="Role: Animation (partly animated)">Rolle: Animation (Teil animiert)</p>
                   </div>
@@ -1368,7 +1364,8 @@
                 data-title="Rettungsdienst Emmental-Oberaargau"
                 data-cat="Logo" data-cat-en="Logo"
                 data-text="Ich durfte für den Sanitätsdienst im Emmental und Oberaargau ein neues Logo designen. Dadurch konnte ich einen kompletten Logo Designprozess inklusive Feedbackschlaufen miterleben und meiner Kreativität freien Lauf lassen."
-                data-text-en="I got to design a new logo for the ambulance service in the Emmental and Oberaargau region. This let me experience a complete logo design process, including feedback loops, and gave me room to let my creativity run free.">
+                data-text-en="I got to design a new logo for the ambulance service in the Emmental and Oberaargau region. This let me experience a complete logo design process, including feedback loops, and gave me room to let my creativity run free."
+                data-tools="Illustrator">
                 <img src="design/logo-rettungsdienst.webp" alt="Emblem Rettungsdienst Emmental-Oberaargau" data-fit="contain">
               </article>
 
@@ -1394,7 +1391,8 @@
                 data-title="Heitere Residenz"
                 data-cat="Plakat" data-cat-en="Poster"
                 data-text="Die Schule für Gestaltung hat von der Heitere Fahne den Auftrag erhalten, dass jede*r von uns ein eigenes Plakat für die «Heitere Residenz» gestaltet. Dabei sollten wir mit kreativen Mitteln arbeiten, zum Beispiel Papier zerreissen, um unkonventionelle Wege auszuprobieren und die Kreativität zu fördern."
-                data-text-en="The school of design received a commission from Heitere Fahne for each of us to design our own poster for the «Heitere Residenz». We were asked to work with creative techniques — for example tearing paper — to try unconventional approaches and encourage creativity.">
+                data-text-en="The school of design received a commission from Heitere Fahne for each of us to design our own poster for the «Heitere Residenz». We were asked to work with creative techniques — for example tearing paper — to try unconventional approaches and encourage creativity."
+                data-tools="InDesign">
                 <img src="design/heitere-residenz.webp" alt="Plakat Heitere Residenz">
               </article>
 
@@ -1426,6 +1424,7 @@
                   <img class="dexp__img" id="dexpImg" alt="">
                 </div>
                 <div class="dexp__body">
+                  <h3 class="dexp__title" id="dexpTitle"></h3>
                   <p class="dexp__cat" id="dexpCat"></p>
                   <p class="dexp__text" id="dexpText"></p>
                   <div class="dexp__tools" id="dexpTools" hidden></div>
@@ -1447,7 +1446,7 @@
     <div class="page">
       <header class="phead">
         <p class="phead__eyebrow">About</p>
-        <h2 class="spotlight" id="aboutSpotlight" data-en="Ready to make your story visible?">Bereit, deine Geschichte sichtbar zu machen?</h2>
+        <h2 class="spotlight" id="aboutSpotlight" data-en="Technology and creativity - that's me.">Technik und Kreativität – das bin ich.</h2>
       </header>
 
       <div class="about-bio">
@@ -1462,7 +1461,7 @@
       </div>
 
       <div class="contact">
-        <p class="contact__statement" data-en="I'm happy to hear about project inquiries and to connect.">Ich freue mich über Projektanfragen und den Austausch.</p>
+        <p class="contact__statement" data-en="I'd love to hear from you - about a project, or just to connect.">Ich freue mich über Projektanfragen und über den Austausch mit dir.</p>
         <dl class="dl">
           <div>
             <dt>E-Mail</dt>
@@ -2090,17 +2089,13 @@
       }
       lbStage.appendChild(el);
       var meta = lbMeta[lbPos];
-      if (meta) {
+      if (meta && meta.text) {
         var cap = document.createElement("div");
         cap.className = "lightbox__caption";
-        var l = document.createElement("p");
-        l.className = "lightbox__caption__label";
-        l.textContent = meta.label;
-        var t = document.createElement("p");
-        t.className = "lightbox__caption__text";
-        t.textContent = meta.text;
-        cap.appendChild(l);
-        cap.appendChild(t);
+        var capT = document.createElement("p");
+        capT.className = "lightbox__caption__text";
+        capT.textContent = meta.text;
+        cap.appendChild(capT);
         lbStage.appendChild(cap);
         lbStage.classList.add("has-cap");
       }
@@ -2302,6 +2297,7 @@
       var dexpScroll = document.getElementById("dexpScroll");
       var dexpImg = document.getElementById("dexpImg");
       var dexpImgs = document.getElementById("dexpImgs");
+      var dexpTitle = document.getElementById("dexpTitle");
       var dexpCat = document.getElementById("dexpCat");
       var dexpText = document.getElementById("dexpText");
       var dexpExtra = document.getElementById("dexpExtra");
@@ -2360,6 +2356,7 @@
             dexpImgs.classList.remove("dexp__imgs--pair");
           }
         }
+        if (dexpTitle) dexpTitle.textContent = c.getAttribute("data-title") || "";
         dexpCat.textContent = getLocalized(c, "data-cat");
         dexpText.textContent = getLocalized(c, "data-text");
         if (dexpTools) {
