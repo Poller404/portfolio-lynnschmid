@@ -487,11 +487,7 @@
   .carousel[data-view="list"] .slide:last-child { border-bottom: 1px solid var(--line); }
   .carousel[data-view="list"] .slide:hover { box-shadow: inset 0 -1px 0 var(--ink); }
   .carousel[data-view="list"] .slide::before {
-    content: counter(row, decimal-leading-zero);
-    flex: none;
-    font-family: var(--font);
-    font-size: .8rem;
-    color: var(--mute);
+    display: none;
   }
   .carousel[data-view="list"] .slide::after {
     content: "→";
@@ -777,6 +773,12 @@
     padding: clamp(1.5rem, 4vw, 3rem);
     max-height: min(56vh, 440px);
   }
+  .dexp__imgs { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(.8rem, 2vw, 1.4rem); }
+  .dexp__imgs .dexp__img { margin: 0; }
+  .dexp__imgs--pair .dexp__img { flex: 1 1 240px; max-width: calc(50% - .7rem); }
+  @media (max-width: 560px) {
+    .dexp__imgs--pair .dexp__img { max-width: 100%; }
+  }
   .dexp__body {
     padding: clamp(1.4rem, 3.5vw, 2rem) clamp(.4rem, 1.5vw, 1rem) 0;
     max-width: 58ch;
@@ -1054,7 +1056,7 @@
                   <div>
                     <h3 class="slide__title">01 Lehrabschlussevent</h3>
                     <p class="slide__sub">Eventvideo</p>
-                <p class="slide__role">Rolle: Lead – Film &amp; Schnitt</p>
+                <p class="slide__role">Rolle: Kamera und Schnitt</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
@@ -1094,19 +1096,40 @@
               <article class="slide">
                 <div class="slide__meta">
                   <div>
-                    <h3 class="slide__title">03 complan26</h3>
+                    <h3 class="slide__title">03 Data Litrecy</h3>
+                    <p class="slide__sub">Animationsvideo</p>
+                <p class="slide__role">Rolle: Animation (Teil animiert)</p>
+                  </div>
+                  </div>
+                <div class="slide__media slide__media--video" role="button" tabindex="0"
+                  style="background-image:url('https://img.youtube.com/vi/U5N5c9NCxKE/hqdefault.jpg')"
+                  aria-label="Video abspielen: 03 Data Litrecy">
+                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                  </button>
+                  <iframe class="slide__player" title="03 Data Litrecy" loading="lazy"
+                    data-src="https://www.youtube.com/embed/U5N5c9NCxKE?autoplay=1&amp;rel=0&amp;modestbranding=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;playsinline=1&amp;vq=hd1080&amp;hd=1&amp;enablejsapi=1"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+              </article>
+              <article class="slide">
+                <div class="slide__meta">
+                  <div>
+                    <h3 class="slide__title">04 complan26</h3>
                     <p class="slide__sub">Statement-Film / Imagefilm</p>
                 <p class="slide__role">Rolle: Kamera &amp; Schnitt</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/complan26.jpg')"
-                  aria-label="Video abspielen: 03 complan26">
+                  aria-label="Video abspielen: 04 complan26">
                   <span class="slide__tag" aria-hidden="true">Abspielen</span>
                   <button type="button" class="slide__close" aria-label="Video schliessen">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
-                  <iframe class="slide__player" title="03 complan26" loading="lazy"
+                  <iframe class="slide__player" title="04 complan26" loading="lazy"
                     data-src="https://www.youtube.com/embed/TEPFKkRhzOk?autoplay=1&amp;rel=0&amp;modestbranding=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;playsinline=1&amp;vq=hd1080&amp;hd=1&amp;enablejsapi=1"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -1115,19 +1138,19 @@
               <article class="slide">
                 <div class="slide__meta">
                   <div>
-                    <h3 class="slide__title">04 SwisscomGames 2026</h3>
+                    <h3 class="slide__title">05 SwisscomGames 2026</h3>
                     <p class="slide__sub">Eventvideo / Aftermovie</p>
                 <p class="slide__role">Rolle: Kamera</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/swisscomgames-2026.jpg')"
-                  aria-label="Video abspielen: 04 SwisscomGames 2026">
+                  aria-label="Video abspielen: 05 SwisscomGames 2026">
                   <span class="slide__tag" aria-hidden="true">Abspielen</span>
                   <button type="button" class="slide__close" aria-label="Video schliessen">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
-                  <iframe class="slide__player" title="04 SwisscomGames 2026" loading="lazy"
+                  <iframe class="slide__player" title="05 SwisscomGames 2026" loading="lazy"
                     data-src="https://www.youtube.com/embed/PDevKzPqXWs?autoplay=1&amp;rel=0&amp;modestbranding=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;playsinline=1&amp;vq=hd1080&amp;hd=1&amp;enablejsapi=1"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -1136,19 +1159,19 @@
               <article class="slide">
                 <div class="slide__meta">
                   <div>
-                    <h3 class="slide__title">05 BC Video Ton</h3>
+                    <h3 class="slide__title">06 BC Video Ton</h3>
                     <p class="slide__sub">Erklärvideo / Tutorial</p>
                 <p class="slide__role">Rolle: Schnitt &amp; Animation</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/bc-video-ton.jpg')"
-                  aria-label="Video abspielen: 05 BC Video Ton">
+                  aria-label="Video abspielen: 06 BC Video Ton">
                   <span class="slide__tag" aria-hidden="true">Abspielen</span>
                   <button type="button" class="slide__close" aria-label="Video schliessen">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
-                  <iframe class="slide__player" title="05 BC Video Ton" loading="lazy"
+                  <iframe class="slide__player" title="06 BC Video Ton" loading="lazy"
                     data-src="https://www.youtube.com/embed/zL4zFGvABWE?autoplay=1&amp;rel=0&amp;modestbranding=1&amp;cc_load_policy=0&amp;iv_load_policy=3&amp;playsinline=1&amp;vq=hd1080&amp;hd=1&amp;enablejsapi=1"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -1220,36 +1243,37 @@
               <article class="dcard"
                 data-title="JetSetGo"
                 data-cat="Branding · ÜK-Modul 272"
-                data-text="Im ÜK-Modul 272 musste ich eine fiktive Brand von Grund auf aufbauen. Ich habe mir das Reisebüro JetSetGo ausgedacht und ein komplettes Branding mit CI/CD dazu gemacht. Das Logo und die zwei Werbeflyer sind von mir erstellt. Gearbeitet habe ich mit InDesign und Illustrator und konnte mir so einiges an neuen Skills aneignen."
-                data-extra="design/printprodukt-logo-jetsetgo.webp|Logo JetSetGo,design/printprodukt-flyer-b.webp|Eventflyer JetSetGo (Variante 2)">
+                data-text="Im ÜK Modul 272 durfte ich eine fiktive Marke von Grund auf aufbauen: das Reisebüro JetSetGo. Dafür habe ich ein komplettes Branding inklusive Corporate Identity/Corporate Design entwickelt – Logo und zwei Werbeflyer stammen komplett von mir. Gearbeitet habe ich mit InDesign und Illustrator und konnte mir dabei einige neue Skills aneignen."
+                data-extra="design/printprodukt-logo-jetsetgo.webp|Logo JetSetGo"
+                data-pair-src="design/printprodukt-flyer-b.webp" data-pair-alt="Eventflyer JetSetGo (Variante 2)">
                 <img src="design/printprodukt-flyer-a.webp" alt="Eventflyer JetSetGo (Variante 1)">
               </article>
 
               <article class="dcard"
                 data-title="Rettungsdienst Emmental-Oberaargau"
                 data-cat="Logo &amp; Emblem"
-                data-text="Crew-Abzeichen für den Rettungsdienst der Region. Der Star of Life im Zentrum, umringt vom Einsatzgebiet als Kartensilhouette, dem Berner Wappen, regionalen Wahrzeichen und einer durchlaufenden EKG-Linie.">
+                data-text="Ich durfte für den Sanitätsdienst im Emmental und Oberaargau ein neues Logo designen. Dadurch konnte ich einen kompletten Logo Designprozess inklusive Feedbackschlaufen miterleben und meiner Kreativität freien Lauf lassen.">
                 <img src="design/logo-rettungsdienst.webp" alt="Emblem Rettungsdienst Emmental-Oberaargau" data-fit="contain">
               </article>
 
               <article class="dcard"
                 data-title="SUPPO"
                 data-cat="Branding &amp; Webdesign"
-                data-text="Suppenlokal in Bern. Marke und Website-Konzept: Das «O» löst sich aus dem Wortzeichen und fällt als eigenes Element unter die Zeile, ein kräftiges Beeren-Rot trägt durch die dunkle Startseite.">
+                data-text="Im ÜK Modul 289 habe ich eine eigene Website erstellt. Von der Ideenfindung bis zum fertigen Design, alles selbst gemacht. Als Beispiel habe ich die fiktive Firma «Suppo» gewählt und das ganze Design in Figma umgesetzt.">
                 <img src="design/suppo-web.webp" alt="SUPPO – Website">
               </article>
 
               <article class="dcard"
                 data-title="Swisscom Filmteam"
                 data-cat="Plakat"
-                data-text="Plakat: Aus unzähligen Kinderporträts wird eine dichte Collage; Halbton-Raster und farbige Konturen geben ihr einen Siebdruck-Charakter, die Swisscom-Karte sitzt als ruhiger Anker.">
+                data-text="In einer Selbststudiumsphase habe ich mir vorgenommen, ein Plakat zu gestalten, und habe für das Filmteam ein neues Wandplakat designt. Dabei habe ich mich intensiv mit InDesign und Photoshop auseinandergesetzt.">
                 <img src="design/swisscom-filmteam.webp" alt="Plakat Swisscom Filmteam">
               </article>
 
               <article class="dcard"
                 data-title="Heitere Residenz"
                 data-cat="Plakat"
-                data-text="Plakat für die «Heitere Residenz» der Heitere Fahne Bern – ein mehrtägiges Format für spartenübergreifende und inklusive Projekte. Weisse, wie von Hand gerissene Flächen brechen das kräftige Gelb auf.">
+                data-text="Die Schule für Gestaltung hat von der Heitere Fahne den Auftrag erhalten, dass jede*r von uns ein eigenes Plakat für die «Heitere Residenz» gestaltet. Dabei sollten wir mit kreativen Mitteln arbeiten, zum Beispiel Papier zerreissen, um unkonventionelle Wege auszuprobieren und die Kreativität zu fördern.">
                 <img src="design/heitere-residenz.webp" alt="Plakat Heitere Residenz">
               </article>
 
@@ -1268,7 +1292,9 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
               </button>
               <div class="dexp__scroll" id="dexpScroll">
-                <img class="dexp__img" id="dexpImg" alt="">
+                <div class="dexp__imgs" id="dexpImgs">
+                  <img class="dexp__img" id="dexpImg" alt="">
+                </div>
                 <div class="dexp__body">
                   <p class="dexp__cat" id="dexpCat"></p>
                   <p class="dexp__text" id="dexpText"></p>
@@ -1298,7 +1324,7 @@
         <dl class="dl">
           <div>
             <dt>E-Mail</dt>
-            <dd><a href="mailto:info@lynnschmid.ch">info@lynnschmid.ch</a></dd>
+            <dd><a href="mailto:info@schmidlynn.ch">info@schmidlynn.ch</a></dd>
           </div>
           <div>
             <dt>Standort</dt>
@@ -1310,7 +1336,7 @@
           </div>
           <div>
             <dt>Social</dt>
-            <dd><a href="#/about">Instagram</a> · <a href="#/about">LinkedIn</a> <span class="mono">— verlinken</span></dd>
+            <dd><a href="https://www.linkedin.com/in/lynn-schmid/" target="_blank" rel="noopener">LinkedIn</a></dd>
           </div>
         </dl>
       </div>
@@ -2046,6 +2072,7 @@
       var dexp = document.getElementById("dexp");
       var dexpScroll = document.getElementById("dexpScroll");
       var dexpImg = document.getElementById("dexpImg");
+      var dexpImgs = document.getElementById("dexpImgs");
       var dexpCat = document.getElementById("dexpCat");
       var dexpText = document.getElementById("dexpText");
       var dexpExtra = document.getElementById("dexpExtra");
@@ -2086,6 +2113,23 @@
         dexpImg.setAttribute("alt", img.getAttribute("alt") || "");
         if (img.hasAttribute("data-fit")) dexpImg.setAttribute("data-fit", img.getAttribute("data-fit"));
         else dexpImg.removeAttribute("data-fit");
+        if (dexpImgs) {
+          var existingPair = dexpImgs.querySelector("#dexpImgPair");
+          if (existingPair) existingPair.remove();
+          var pairSrc = c.getAttribute("data-pair-src");
+          if (pairSrc) {
+            var pimg = document.createElement("img");
+            pimg.id = "dexpImgPair";
+            pimg.className = "dexp__img";
+            pimg.src = pairSrc;
+            pimg.alt = c.getAttribute("data-pair-alt") || "";
+            pimg.loading = "lazy";
+            dexpImgs.appendChild(pimg);
+            dexpImgs.classList.add("dexp__imgs--pair");
+          } else {
+            dexpImgs.classList.remove("dexp__imgs--pair");
+          }
+        }
         dexpCat.textContent = c.getAttribute("data-cat") || "";
         dexpText.textContent = c.getAttribute("data-text") || "";
         if (dexpExtra) {
