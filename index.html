@@ -118,6 +118,21 @@
     text-decoration: none;
     color: var(--ink);
   }
+  .nav__lang {
+    appearance: none; -webkit-appearance: none;
+    font-family: var(--font);
+    font-weight: 500;
+    font-size: clamp(.72rem, .68rem + .2vw, .84rem);
+    letter-spacing: .04em;
+    color: var(--mute);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .28rem .7rem;
+    cursor: pointer;
+    transition: color .16s ease, border-color .16s ease;
+  }
+  .nav__lang:hover { color: var(--ink); border-color: var(--ink); }
 
   @media (max-width: 560px) {
     .nav { gap: 1rem; flex-wrap: wrap; }
@@ -428,6 +443,17 @@
     padding-bottom: clamp(.7rem, 1.6vw, 1rem);
     border-bottom: 1px solid var(--line);
   }
+  .badge-new {
+    display: inline-block;
+    margin-left: .5rem;
+    padding: .12rem .55rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font); font-weight: 700;
+    font-size: .62rem; letter-spacing: .08em; text-transform: uppercase;
+    vertical-align: middle; line-height: 1.7;
+  }
   .slide__title {
     font-family: var(--font);
     font-weight: 700;
@@ -610,6 +636,7 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+  :root[data-page="arbeiten"][data-cat="design"] .arbeiten-head { display: none; }
   .dwrap {
     min-height: 100svh;
     max-width: var(--maxw);
@@ -799,6 +826,16 @@
     height: 84px; width: auto; border-radius: 8px; object-fit: cover;
     box-shadow: 0 4px 14px -6px rgba(11,11,11,.35);
   }
+  .dexp__tools { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.1rem 0 0; }
+  .tool-pill {
+    display: inline-block;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    font-family: var(--font); font-weight: 500;
+    font-size: .78rem;
+    color: var(--ink-soft);
+  }
   .dexp__close {
     position: absolute; top: .7rem; right: .7rem; z-index: 2;
     appearance: none; -webkit-appearance: none; border: 0; cursor: pointer;
@@ -938,6 +975,38 @@
   .lightbox__nav--next { right: clamp(.5rem, 2.5vw, 2.4rem); }
   .lightbox__nav[hidden] { display: none; }
 
+  /* --- ABOUT / bio --- */
+  .about-bio {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(1.8rem, 5vw, 3rem);
+    margin: 0 0 clamp(3rem, 7vw, 5rem);
+    padding-bottom: clamp(3rem, 7vw, 5rem);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 820px) { .about-bio { grid-template-columns: .85fr 1.15fr; align-items: center; } }
+  .about-bio__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: clamp(12px, 1.6vw, 18px);
+    filter: grayscale(1) contrast(1.04);
+    transition: filter .75s cubic-bezier(.83, 0, .17, 1);
+  }
+  .about-bio__photo:hover img { filter: grayscale(0); }
+  @media (hover: none) { .about-bio__photo img { filter: none; } }
+  .about-bio__text { display: grid; gap: 1.1rem; }
+  .about-bio__text p {
+    margin: 0;
+    font-size: var(--step-body);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 58ch;
+  }
+  @media (prefers-reduced-motion: reduce) { .about-bio__photo img { transition: none; } }
+
   /* --- ABOUT / contact --- */
   .contact {
     display: grid;
@@ -992,6 +1061,44 @@
     padding: .5rem .8rem;
     font-family: var(--font); font-size: .74rem;
   }
+
+  /* ============ CUSTOM CURSOR ============ */
+  @media (hover: hover) and (pointer: fine) {
+    body.cursor-ready, body.cursor-ready * { cursor: none !important; }
+    .cursor--dot, .cursor--ring {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      border-radius: 50%;
+      will-change: transform;
+    }
+    .cursor--dot {
+      width: 6px; height: 6px;
+      background: var(--ink);
+      transition: background-color .2s ease, width .25s ease, height .25s ease;
+    }
+    .cursor--ring {
+      width: 34px; height: 34px;
+      border: 1px solid var(--ink);
+      opacity: .5;
+      transition: width .25s ease, height .25s ease, border-color .25s ease,
+        opacity .25s ease, background-color .25s ease;
+    }
+    body.cursor-hover .cursor--dot { background: var(--accent); width: 8px; height: 8px; }
+    body.cursor-hover .cursor--ring {
+      width: 54px; height: 54px;
+      border-color: var(--accent);
+      background: rgba(232, 85, 45, .08);
+      opacity: 1;
+    }
+  }
+  @media (hover: none), (pointer: coarse) {
+    .cursor--dot, .cursor--ring { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cursor--dot, .cursor--ring { display: none; }
+  }
 </style>
 
 <meta name="description" content="Lynn Schmid – Portfolio für Video, Foto und Design: ausgewählte Arbeiten aus Eventvideo, Porträt- und Produktfotografie sowie Branding." />
@@ -1005,15 +1112,16 @@
 </head>
 <body>
 
-<a class="skip" href="#main">Zum Inhalt springen</a>
+<a class="skip" href="#main" data-en="Skip to content">Zum Inhalt springen</a>
 
-<nav class="nav" aria-label="Hauptnavigation">
-  <a class="nav__mark" href="#/start" aria-label="Lynn Schmid — Start">LS</a>
+<nav class="nav" aria-label="Hauptnavigation" data-en-aria="Main navigation">
+  <a class="nav__mark" href="#/start" aria-label="Lynn Schmid — Start" data-en-aria="Lynn Schmid — Home">LS</a>
   <div class="nav__links">
     <a class="nav__link" href="#/video" data-route-link="video">Video</a>
     <a class="nav__link" href="#/foto" data-route-link="foto">Foto</a>
     <a class="nav__link" href="#/design" data-route-link="design">Design</a>
     <a class="nav__link" href="#/about" data-route-link="about">About</a>
+    <button type="button" class="nav__lang" id="langToggle" aria-label="Sprache wechseln" data-en-aria="Switch language">EN</button>
   </div>
 </nav>
 
@@ -1041,10 +1149,15 @@
   <section class="route" id="route-arbeiten" data-route="arbeiten" aria-label="Arbeiten">
     <div class="page">
 
+      <header class="phead arbeiten-head">
+        <p class="phead__eyebrow" data-en="Work">Arbeiten</p>
+        <h2 class="spotlight" id="arbeitenSpotlight" data-en="Where technology meets creativity.">Wo Technik auf Kreativität trifft.</h2>
+      </header>
+
       <!-- VIDEO -->
       <div class="wpanel is-active" data-panel="video">
         <div class="carousel" data-view="grid">
-          <div class="carousel__view" role="group" aria-label="Ansicht">
+          <div class="carousel__view" role="group" aria-label="Ansicht" data-en-aria="View">
             <button type="button" class="carousel__viewBtn is-active" data-view-btn="grid">Grid</button>
             <span aria-hidden="true">|</span>
             <button type="button" class="carousel__viewBtn" data-view-btn="list">List</button>
@@ -1055,15 +1168,15 @@
                 <div class="slide__meta">
                   <div>
                     <h3 class="slide__title">01 Lehrabschlussevent</h3>
-                    <p class="slide__sub">Eventvideo</p>
-                <p class="slide__role">Rolle: Kamera und Schnitt</p>
+                    <p class="slide__sub" data-en="Event video">Eventvideo</p>
+                <p class="slide__role" data-en="Role: Camera and editing">Rolle: Kamera und Schnitt</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/lehrabschlussevent.jpg')"
                   aria-label="Video abspielen: 01 Lehrabschlussevent">
-                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
-                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                  <span class="slide__tag" aria-hidden="true" data-en="Play">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen" data-en-aria="Close video">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
                   <iframe class="slide__player" title="01 Lehrabschlussevent" loading="lazy"
@@ -1076,15 +1189,15 @@
                 <div class="slide__meta">
                   <div>
                     <h3 class="slide__title">02 felssturzvald'anniviers</h3>
-                    <p class="slide__sub">Dokumentation / Reportage</p>
-                <p class="slide__role">Rolle: Kamera</p>
+                    <p class="slide__sub" data-en="Documentary / Report">Dokumentation / Reportage</p>
+                <p class="slide__role" data-en="Role: Camera">Rolle: Kamera</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/felssturz-vald-anniviers.jpg')"
                   aria-label="Video abspielen: 02 felssturzvald'anniviers">
-                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
-                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                  <span class="slide__tag" aria-hidden="true" data-en="Play">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen" data-en-aria="Close video">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
                   <iframe class="slide__player" title="02 felssturzvald'anniviers" loading="lazy"
@@ -1096,16 +1209,16 @@
               <article class="slide">
                 <div class="slide__meta">
                   <div>
-                    <h3 class="slide__title">03 Data Litrecy</h3>
-                    <p class="slide__sub">Animationsvideo</p>
-                <p class="slide__role">Rolle: Animation (Teil animiert)</p>
+                    <h3 class="slide__title">03 Data Litrecy <span class="badge-new" data-en="New">Neu</span></h3>
+                    <p class="slide__sub" data-en="Animation video">Animationsvideo</p>
+                <p class="slide__role" data-en="Role: Animation (partly animated)">Rolle: Animation (Teil animiert)</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('https://img.youtube.com/vi/U5N5c9NCxKE/hqdefault.jpg')"
                   aria-label="Video abspielen: 03 Data Litrecy">
-                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
-                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                  <span class="slide__tag" aria-hidden="true" data-en="Play">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen" data-en-aria="Close video">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
                   <iframe class="slide__player" title="03 Data Litrecy" loading="lazy"
@@ -1118,15 +1231,15 @@
                 <div class="slide__meta">
                   <div>
                     <h3 class="slide__title">04 complan26</h3>
-                    <p class="slide__sub">Statement-Film / Imagefilm</p>
-                <p class="slide__role">Rolle: Kamera &amp; Schnitt</p>
+                    <p class="slide__sub" data-en="Statement film / Image film">Statement-Film / Imagefilm</p>
+                <p class="slide__role" data-en="Role: Camera &amp; editing">Rolle: Kamera &amp; Schnitt</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/complan26.jpg')"
                   aria-label="Video abspielen: 04 complan26">
-                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
-                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                  <span class="slide__tag" aria-hidden="true" data-en="Play">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen" data-en-aria="Close video">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
                   <iframe class="slide__player" title="04 complan26" loading="lazy"
@@ -1139,15 +1252,15 @@
                 <div class="slide__meta">
                   <div>
                     <h3 class="slide__title">05 SwisscomGames 2026</h3>
-                    <p class="slide__sub">Eventvideo / Aftermovie</p>
-                <p class="slide__role">Rolle: Kamera</p>
+                    <p class="slide__sub" data-en="Event video / Aftermovie">Eventvideo / Aftermovie</p>
+                <p class="slide__role" data-en="Role: Camera">Rolle: Kamera</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/swisscomgames-2026.jpg')"
                   aria-label="Video abspielen: 05 SwisscomGames 2026">
-                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
-                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                  <span class="slide__tag" aria-hidden="true" data-en="Play">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen" data-en-aria="Close video">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
                   <iframe class="slide__player" title="05 SwisscomGames 2026" loading="lazy"
@@ -1160,15 +1273,15 @@
                 <div class="slide__meta">
                   <div>
                     <h3 class="slide__title">06 BC Video Ton</h3>
-                    <p class="slide__sub">Erklärvideo / Tutorial</p>
-                <p class="slide__role">Rolle: Schnitt &amp; Animation</p>
+                    <p class="slide__sub" data-en="Explainer video / Tutorial">Erklärvideo / Tutorial</p>
+                <p class="slide__role" data-en="Role: Editing &amp; animation">Rolle: Schnitt &amp; Animation</p>
                   </div>
                   </div>
                 <div class="slide__media slide__media--video" role="button" tabindex="0"
                   style="background-image:url('video/bc-video-ton.jpg')"
                   aria-label="Video abspielen: 06 BC Video Ton">
-                  <span class="slide__tag" aria-hidden="true">Abspielen</span>
-                  <button type="button" class="slide__close" aria-label="Video schliessen">
+                  <span class="slide__tag" aria-hidden="true" data-en="Play">Abspielen</span>
+                  <button type="button" class="slide__close" aria-label="Video schliessen" data-en-aria="Close video">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                   </button>
                   <iframe class="slide__player" title="06 BC Video Ton" loading="lazy"
@@ -1184,48 +1297,48 @@
 
       <!-- FOTO -->
       <div class="wpanel" data-panel="foto">
-        <div class="subfilter" role="tablist" aria-label="Foto-Kategorie">
-          <button class="subfilter__btn is-active" data-sub="alle">Alle</button>
+        <div class="subfilter" role="tablist" aria-label="Foto-Kategorie" data-en-aria="Photo category">
+          <button class="subfilter__btn is-active" data-sub="alle" data-en="All">Alle</button>
           <span class="subfilter__sep" aria-hidden="true">·</span>
           <button class="subfilter__btn" data-sub="event">Event</button>
           <span class="subfilter__sep" aria-hidden="true">·</span>
-          <button class="subfilter__btn" data-sub="portraet">Porträt</button>
+          <button class="subfilter__btn" data-sub="portraet" data-en="Portrait">Porträt</button>
           <span class="subfilter__sep" aria-hidden="true">·</span>
-          <button class="subfilter__btn" data-sub="produkt">Produkt</button>
+          <button class="subfilter__btn" data-sub="produkt" data-en="Product">Produkt</button>
         </div>
-        <div class="gallery"><button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-02.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-03.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-text="Swisscom Shop" aria-label="Foto öffnen"><img src="fotos/produkt-01.jpg" alt="" loading="lazy" width="1500" height="2250"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-01.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-01.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-text="Swisscom Shop" aria-label="Foto öffnen"><img src="fotos/produkt-02.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-04.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-04.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-text="Swisscom Shop" aria-label="Foto öffnen"><img src="fotos/produkt-03.jpg" alt="" loading="lazy" width="1500" height="2250"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-03.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-02.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-text="Swisscom Shop" aria-label="Foto öffnen"><img src="fotos/produkt-05.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-06.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-07.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-text="Swisscom Shop" aria-label="Foto öffnen"><img src="fotos/produkt-04.jpg" alt="" loading="lazy" width="1400" height="2100"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-05.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-05.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-text="Swisscom Shop" aria-label="Foto öffnen"><img src="fotos/produkt-06.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-07.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Kreatives Porträt" data-cap-text="ÜK-Modul 269" aria-label="Foto öffnen"><img src="fotos/portraet-10.jpg" alt="" loading="lazy" width="1400" height="2100"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Kreatives Produktfoto" data-cap-text="ÜK-Modul 269" aria-label="Foto öffnen"><img src="fotos/produkt-07.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-text="Parato" aria-label="Foto öffnen"><img src="fotos/event-10.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-06.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Neutrales Produktfoto" data-cap-text="ÜK-Modul 269" aria-label="Foto öffnen"><img src="fotos/produkt-08.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-08.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Natürliches Porträt" data-cap-text="ÜK-Modul 269" aria-label="Foto öffnen"><img src="fotos/portraet-11.jpg" alt="" loading="lazy" width="1066" height="1600"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-text="Parato" aria-label="Foto öffnen"><img src="fotos/event-11.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-08.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen"><img src="fotos/event-09.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
-          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen"><img src="fotos/portraet-09.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-text="Parato" aria-label="Foto öffnen"><img src="fotos/event-12.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-text="Parato" aria-label="Foto öffnen"><img src="fotos/event-13.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
-          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-text="Parato" aria-label="Foto öffnen"><img src="fotos/event-14.jpg" alt="" loading="lazy" width="1600" height="1066"></button></div>
+        <div class="gallery"><button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-02.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-03.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-label-en="Product photo" data-cap-text="Swisscom Shop" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-01.jpg" alt="" loading="lazy" width="1500" height="2250"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-01.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-01.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-label-en="Product photo" data-cap-text="Swisscom Shop" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-02.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-04.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-04.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-label-en="Product photo" data-cap-text="Swisscom Shop" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-03.jpg" alt="" loading="lazy" width="1500" height="2250"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-03.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-02.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-label-en="Product photo" data-cap-text="Swisscom Shop" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-05.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-06.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-07.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-label-en="Product photo" data-cap-text="Swisscom Shop" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-04.jpg" alt="" loading="lazy" width="1400" height="2100"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-05.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-05.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Produktfoto" data-cap-label-en="Product photo" data-cap-text="Swisscom Shop" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-06.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-07.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Kreatives Porträt" data-cap-label-en="Creative portrait" data-cap-text="ÜK-Modul 269" data-cap-text-en="ÜK module 269" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-10.jpg" alt="" loading="lazy" width="1400" height="2100"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Kreatives Produktfoto" data-cap-label-en="Creative product photo" data-cap-text="ÜK-Modul 269" data-cap-text-en="ÜK module 269" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-07.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-label-en="Website portrait" data-cap-text="Parato" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-10.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-06.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="produkt" data-cap-label="Neutrales Produktfoto" data-cap-label-en="Neutral product photo" data-cap-text="ÜK-Modul 269" data-cap-text-en="ÜK module 269" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/produkt-08.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-08.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Natürliches Porträt" data-cap-label-en="Natural portrait" data-cap-text="ÜK-Modul 269" data-cap-text-en="ÜK module 269" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-11.jpg" alt="" loading="lazy" width="1066" height="1600"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-label-en="Website portrait" data-cap-text="Parato" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-11.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-08.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Eventreportage" data-cap-label-en="Event coverage" data-cap-text="PartnerDay Swisscom Aarau" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-09.jpg" alt="" loading="lazy" width="1600" height="2400"></button>
+          <button class="gallery__item" type="button" data-sub="portraet" data-cap-label="Porträt" data-cap-label-en="Portrait" data-cap-text="Zoom Swisscom" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/portraet-09.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-label-en="Website portrait" data-cap-text="Parato" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-12.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-label-en="Website portrait" data-cap-text="Parato" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-13.jpg" alt="" loading="lazy" width="1600" height="1066"></button>
+          <button class="gallery__item" type="button" data-sub="event" data-cap-label="Website-Porträt" data-cap-label-en="Website portrait" data-cap-text="Parato" aria-label="Foto öffnen" data-en-aria="Open photo"><img src="fotos/event-14.jpg" alt="" loading="lazy" width="1600" height="1066"></button></div>
       </div>
 
       <!-- DESIGN -->
@@ -1234,47 +1347,63 @@
           <div class="dbio">
             <p class="dbio__name" id="dbioName">Lynn Schmid</p>
             <p class="dbio__role" id="dbioRole">Designs</p>
-            <p class="dbio__hint" id="dbioHint">Arbeit anklicken</p>
+            <p class="dbio__hint" id="dbioHint" data-en="Click a project">Arbeit anklicken</p>
           </div>
           <div class="dcar-col">
-            <div class="dcar" tabindex="0" aria-label="Designarbeiten – scrollen">
+            <div class="dcar" tabindex="0" aria-label="Designarbeiten – scrollen" data-en-aria="Design work – scroll">
               <div class="dcar__pad" aria-hidden="true"></div>
 
               <article class="dcard"
                 data-title="JetSetGo"
-                data-cat="Branding · ÜK-Modul 272"
+                data-cat="Branding · ÜK-Modul 272" data-cat-en="Branding · ÜK module 272"
                 data-text="Im ÜK Modul 272 durfte ich eine fiktive Marke von Grund auf aufbauen, das Reisebüro JetSetGo. Dafür habe ich ein komplettes Branding inklusive Corporate Identity/Corporate Design entwickelt. Logo und zwei Werbeflyer stammen komplett von mir. Gearbeitet habe ich mit InDesign und Illustrator und konnte mir dabei einige neue Skills aneignen."
+                data-text-en="In ÜK module 272, I got to build a fictional brand from scratch: the travel agency JetSetGo. For this, I developed a complete branding package including corporate identity/corporate design. The logo and two promotional flyers are entirely my own work. I worked with InDesign and Illustrator and picked up several new skills along the way."
                 data-extra="design/printprodukt-logo-jetsetgo.webp|Logo JetSetGo"
+                data-tools="InDesign · Illustrator"
                 data-pair-src="design/printprodukt-flyer-b.webp" data-pair-alt="Eventflyer JetSetGo (Variante 2)">
                 <img src="design/printprodukt-flyer-a.webp" alt="Eventflyer JetSetGo (Variante 1)">
               </article>
 
               <article class="dcard"
                 data-title="Rettungsdienst Emmental-Oberaargau"
-                data-cat="Logo"
-                data-text="Ich durfte für den Sanitätsdienst im Emmental und Oberaargau ein neues Logo designen. Dadurch konnte ich einen kompletten Logo Designprozess inklusive Feedbackschlaufen miterleben und meiner Kreativität freien Lauf lassen.">
+                data-cat="Logo" data-cat-en="Logo"
+                data-text="Ich durfte für den Sanitätsdienst im Emmental und Oberaargau ein neues Logo designen. Dadurch konnte ich einen kompletten Logo Designprozess inklusive Feedbackschlaufen miterleben und meiner Kreativität freien Lauf lassen."
+                data-text-en="I got to design a new logo for the ambulance service in the Emmental and Oberaargau region. This let me experience a complete logo design process, including feedback loops, and gave me room to let my creativity run free.">
                 <img src="design/logo-rettungsdienst.webp" alt="Emblem Rettungsdienst Emmental-Oberaargau" data-fit="contain">
               </article>
 
               <article class="dcard"
                 data-title="SUPPO"
-                data-cat="Branding &amp; Webdesign"
-                data-text="Im ÜK Modul 289 habe ich eine eigene Website erstellt. Von der Ideenfindung bis zum fertigen Design, alles selbst gemacht. Als Beispiel habe ich die fiktive Firma «Suppo» gewählt und das ganze Design in Figma umgesetzt.">
+                data-cat="Branding &amp; Webdesign" data-cat-en="Branding &amp; Web Design"
+                data-text="Im ÜK Modul 289 habe ich eine eigene Website erstellt. Von der Ideenfindung bis zum fertigen Design, alles selbst gemacht. Als Beispiel habe ich die fiktive Firma «Suppo» gewählt und das ganze Design in Figma umgesetzt."
+                data-text-en="In ÜK module 289, I built my own website. From the initial idea to the finished design, everything was done by me. As an example, I chose the fictional company «Suppo» and designed the whole thing in Figma."
+                data-tools="Figma">
                 <img src="design/suppo-web.webp" alt="SUPPO – Website">
               </article>
 
               <article class="dcard"
                 data-title="Swisscom Filmteam"
-                data-cat="Plakat"
-                data-text="In einer Selbststudiumsphase habe ich mir vorgenommen, ein Plakat zu gestalten, und habe für das Filmteam ein neues Wandplakat designt. Dabei habe ich mich intensiv mit InDesign und Photoshop auseinandergesetzt.">
+                data-cat="Plakat" data-cat-en="Poster"
+                data-text="In einer Selbststudiumsphase habe ich mir vorgenommen, ein Plakat zu gestalten, und habe für das Filmteam ein neues Wandplakat designt. Dabei habe ich mich intensiv mit InDesign und Photoshop auseinandergesetzt."
+                data-text-en="During a self-study phase, I set out to design a poster and created a new wall poster for the film team. In the process, I worked intensively with InDesign and Photoshop."
+                data-tools="InDesign · Photoshop">
                 <img src="design/swisscom-filmteam.webp" alt="Plakat Swisscom Filmteam">
               </article>
 
               <article class="dcard"
                 data-title="Heitere Residenz"
-                data-cat="Plakat"
-                data-text="Die Schule für Gestaltung hat von der Heitere Fahne den Auftrag erhalten, dass jede*r von uns ein eigenes Plakat für die «Heitere Residenz» gestaltet. Dabei sollten wir mit kreativen Mitteln arbeiten, zum Beispiel Papier zerreissen, um unkonventionelle Wege auszuprobieren und die Kreativität zu fördern.">
+                data-cat="Plakat" data-cat-en="Poster"
+                data-text="Die Schule für Gestaltung hat von der Heitere Fahne den Auftrag erhalten, dass jede*r von uns ein eigenes Plakat für die «Heitere Residenz» gestaltet. Dabei sollten wir mit kreativen Mitteln arbeiten, zum Beispiel Papier zerreissen, um unkonventionelle Wege auszuprobieren und die Kreativität zu fördern."
+                data-text-en="The school of design received a commission from Heitere Fahne for each of us to design our own poster for the «Heitere Residenz». We were asked to work with creative techniques — for example tearing paper — to try unconventional approaches and encourage creativity.">
                 <img src="design/heitere-residenz.webp" alt="Plakat Heitere Residenz">
+              </article>
+
+              <article class="dcard"
+                data-title="Data Literacy"
+                data-cat="Charakterdesign · Team Motion" data-cat-en="Character Design · Team Motion"
+                data-text="Ich durfte für das Team Motion im Rahmen eines Auftrags zum Thema Data Literacy die Hauptfigur designen und illustrieren."
+                data-text-en="For an assignment on the topic of data literacy, I got to design and illustrate the main character for the Motion team.">
+                <img src="design/charakter-data-literacy.webp" alt="Charakter-Illustration Data Literacy" data-fit="contain">
               </article>
 
               <div class="dcar__pad" aria-hidden="true"></div>
@@ -1285,10 +1414,11 @@
               <button type="button" aria-label="Zu Arbeit 3"></button>
               <button type="button" aria-label="Zu Arbeit 4"></button>
               <button type="button" aria-label="Zu Arbeit 5"></button>
+              <button type="button" aria-label="Zu Arbeit 6"></button>
             </div>
 
             <div class="dexp" id="dexp" hidden>
-              <button class="dexp__close" id="dexpClose" type="button" aria-label="Schliessen">
+              <button class="dexp__close" id="dexpClose" type="button" aria-label="Schliessen" data-en-aria="Close">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
               </button>
               <div class="dexp__scroll" id="dexpScroll">
@@ -1298,6 +1428,7 @@
                 <div class="dexp__body">
                   <p class="dexp__cat" id="dexpCat"></p>
                   <p class="dexp__text" id="dexpText"></p>
+                  <div class="dexp__tools" id="dexpTools" hidden></div>
                   <div class="dexp__extra" id="dexpExtra" hidden></div>
                 </div>
               </div>
@@ -1316,22 +1447,33 @@
     <div class="page">
       <header class="phead">
         <p class="phead__eyebrow">About</p>
-        <h2 class="spotlight" id="aboutSpotlight">Bereit, deine Geschichte sichtbar zu machen?</h2>
+        <h2 class="spotlight" id="aboutSpotlight" data-en="Ready to make your story visible?">Bereit, deine Geschichte sichtbar zu machen?</h2>
       </header>
 
+      <div class="about-bio">
+        <div class="about-bio__photo">
+          <img src="fotos/about-portraet-lynn.jpg" alt="Porträt Lynn Schmid" loading="lazy">
+        </div>
+        <div class="about-bio__text">
+          <p data-en="Technology and creativity — to me, they simply belong together. I'm Lynn, 17 years old, living in the canton of Bern, currently in the middle of the 3rd year of my apprenticeship as a Mediamatiker (media technologist). Web design, video, photo editing, graphics — I like trying my hand at every area and seeing where I can still get better.">Technik und Kreativität, für mich gehört das einfach zusammen. Ich bin Lynn, 17 Jahre alt, wohne im Kanton Bern und stecke gerade mitten im 3. Lehrjahr meiner Ausbildung zur Mediamatikerin. Webdesign, Video, Fotobearbeitung, Grafik, ich probiere mich gerne durch alle Bereiche durch und schaue, wo ich noch besser werden kann.</p>
+          <p data-en="What I enjoy most is being hands-on at events: keeping the technical side under control while shaping things creatively at the same time, so that everything runs the way it should by the end.">Am meisten Spass macht mir, wenn ich bei Veranstaltungen mitmischen kann: Technik im Griff haben, gleichzeitig kreativ mitgestalten, und am Ende läuft alles wie es soll.</p>
+          <p data-en="In my free time too, I enjoy being creative, spending time with friends, and staying open to new ideas — whether that's a spontaneous outing or a shared project. I carry that curiosity into my training, especially when it comes to developing and implementing new concepts.">Auch privat bin ich gerne kreativ unterwegs, verbringe Zeit mit Freunden und bin offen für neue Ideen, ob bei einem spontanen Ausflug oder einem gemeinsamen Projekt. Diese Neugier nehme ich mit in meine Ausbildung, vor allem wenn es darum geht, neue Konzepte zu entwickeln und umzusetzen.</p>
+        </div>
+      </div>
+
       <div class="contact">
-        <p class="contact__statement">Ich freue mich über Projektanfragen und den Austausch.</p>
+        <p class="contact__statement" data-en="I'm happy to hear about project inquiries and to connect.">Ich freue mich über Projektanfragen und den Austausch.</p>
         <dl class="dl">
           <div>
             <dt>E-Mail</dt>
             <dd><a href="mailto:info@schmidlynn.ch">info@schmidlynn.ch</a></dd>
           </div>
           <div>
-            <dt>Standort</dt>
-            <dd>Schweiz</dd>
+            <dt data-en="Location">Standort</dt>
+            <dd data-en="Switzerland">Schweiz</dd>
           </div>
           <div>
-            <dt>Leistungen</dt>
+            <dt data-en="Services">Leistungen</dt>
             <dd>Video · Foto · Design</dd>
           </div>
           <div>
@@ -1348,22 +1490,22 @@
 
 </main>
 
-<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Ansicht">
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Ansicht" data-en-aria="View">
   <div class="lightbox__stage" id="lightboxStage"></div>
-  <button class="lightbox__btn lightbox__close" id="lightboxClose" type="button" aria-label="Schließen">
+  <button class="lightbox__btn lightbox__close" id="lightboxClose" type="button" aria-label="Schließen" data-en-aria="Close">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
   </button>
-  <button class="lightbox__btn lightbox__nav lightbox__nav--prev" id="lightboxPrev" type="button" aria-label="Vorheriges Bild">
+  <button class="lightbox__btn lightbox__nav lightbox__nav--prev" id="lightboxPrev" type="button" aria-label="Vorheriges Bild" data-en-aria="Previous image">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>
   </button>
-  <button class="lightbox__btn lightbox__nav lightbox__nav--next" id="lightboxNext" type="button" aria-label="Nächstes Bild">
+  <button class="lightbox__btn lightbox__nav lightbox__nav--next" id="lightboxNext" type="button" aria-label="Nächstes Bild" data-en-aria="Next image">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
   </button>
 </div>
 
 <div class="dsheet" id="dsheet" hidden>
   <div class="dsheet__panel" role="dialog" aria-modal="true" aria-labelledby="dsheetTitle">
-    <button class="dsheet__close" id="dsheetClose" type="button" aria-label="Ordner schliessen">
+    <button class="dsheet__close" id="dsheetClose" type="button" aria-label="Ordner schliessen" data-en-aria="Close folder">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
     </button>
     <header class="dsheet__head">
@@ -1377,6 +1519,88 @@
 
 <script>
   (function () {
+    /* ---------------------------------------------------------
+       i18n — fully bilingual DE/EN. Translated strings live as
+       data-en / data-en-aria attributes right on their elements
+       (see the HTML); a handful of literals that only ever exist
+       as JS strings go through T/t(); a few aria-labels carry a
+       dynamic suffix (a title, a number) and are handled as
+       prefix swaps instead of whole-string lookups.
+       --------------------------------------------------------- */
+    var LANG = "de";
+    try { LANG = localStorage.getItem("lang") === "en" ? "en" : "de"; } catch (e) {}
+
+    var T = {
+      "Nach unten scrollen": "Scroll down",
+      "Arbeit anklicken": "Click a project"
+    };
+    function t(s) { return (LANG === "en" && T[s]) ? T[s] : s; }
+
+    function getLocalized(el, attr) {
+      if (!el) return "";
+      if (LANG === "en") {
+        var en = el.getAttribute(attr + "-en");
+        if (en) return en;
+      }
+      return el.getAttribute(attr) || "";
+    }
+
+    var ARIA_PREFIXES = [
+      ["Video abspielen: ", "Play video: "],
+      ["Grösser ansehen: ", "View larger: "],
+      ["Zu Arbeit ", "Go to work "]
+    ];
+    function translateAriaPrefixes() {
+      var all = document.querySelectorAll("[aria-label]");
+      for (var i = 0; i < all.length; i++) {
+        var el = all[i];
+        var label = el.getAttribute("aria-label");
+        for (var j = 0; j < ARIA_PREFIXES.length; j++) {
+          var de = ARIA_PREFIXES[j][0], en = ARIA_PREFIXES[j][1];
+          if (LANG === "en" && label.indexOf(de) === 0) {
+            el.setAttribute("aria-label", en + label.slice(de.length));
+            break;
+          }
+          if (LANG === "de" && label.indexOf(en) === 0) {
+            el.setAttribute("aria-label", de + label.slice(en.length));
+            break;
+          }
+        }
+      }
+    }
+
+    function applyLang() {
+      document.documentElement.lang = LANG;
+      var langBtn = document.getElementById("langToggle");
+      if (langBtn) langBtn.textContent = LANG === "en" ? "DE" : "EN";
+
+      var withText = document.querySelectorAll("[data-en]");
+      for (var i = 0; i < withText.length; i++) {
+        var el = withText[i];
+        if (el.dataset.de === undefined) el.dataset.de = el.textContent;
+        el.textContent = LANG === "en" ? el.getAttribute("data-en") : el.dataset.de;
+      }
+      var withAria = document.querySelectorAll("[data-en-aria]");
+      for (var k = 0; k < withAria.length; k++) {
+        var elA = withAria[k];
+        if (elA.dataset.deAria === undefined) elA.dataset.deAria = elA.getAttribute("aria-label") || "";
+        elA.setAttribute("aria-label", LANG === "en" ? elA.getAttribute("data-en-aria") : elA.dataset.deAria);
+      }
+      translateAriaPrefixes();
+      if (typeof refreshDesignLang === "function") refreshDesignLang();
+    }
+
+    var refreshDesignLang = null;
+    var langToggleBtn = document.getElementById("langToggle");
+    if (langToggleBtn) {
+      langToggleBtn.addEventListener("click", function () {
+        LANG = LANG === "en" ? "de" : "en";
+        try { localStorage.setItem("lang", LANG); } catch (e) {}
+        applyLang();
+      });
+    }
+    applyLang();
+
     var sections = {
       start:   document.getElementById("route-start"),
       arbeiten: document.getElementById("route-arbeiten"),
@@ -1841,6 +2065,11 @@
       portraet: { label: "Porträt",           text: "Business- und Personenporträts mit natürlichem Licht." },
       produkt:  { label: "Produktfotografie", text: "Produkte und Making-of klar in Szene gesetzt." }
     };
+    var PHOTO_CAPTIONS_EN = {
+      event:    { label: "Event photography",   text: "Coverage of events, trade fairs and company gatherings – close up, in the moment." },
+      portraet: { label: "Portrait",             text: "Business and personal portraits with natural light." },
+      produkt:  { label: "Product photography",  text: "Products and making-of shots, clearly staged." }
+    };
     var heroSrc = (function () {
       var s = document.querySelector(".home__clip video source");
       return s ? s.getAttribute("src") : "";
@@ -1905,10 +2134,11 @@
         return ph ? ph.className : "ph";
       });
       lbMeta = visible.map(function (it) {
-        var label = it.getAttribute("data-cap-label");
-        var text = it.getAttribute("data-cap-text");
-        if (label || text) return { label: label || "Foto", text: text || "" };
-        return PHOTO_CAPTIONS[it.getAttribute("data-sub")] || null;
+        var label = getLocalized(it, "data-cap-label");
+        var text = getLocalized(it, "data-cap-text");
+        if (label || text) return { label: label || (LANG === "en" ? "Photo" : "Foto"), text: text || "" };
+        var captions = LANG === "en" ? PHOTO_CAPTIONS_EN : PHOTO_CAPTIONS;
+        return captions[it.getAttribute("data-sub")] || null;
       });
       lbPos = Math.max(0, visible.indexOf(el));
       lbMode = "photo";
@@ -2043,9 +2273,8 @@
     if (dsheetClose) dsheetClose.addEventListener("click", closeFolder);
     if (dsheet) dsheet.addEventListener("click", function (e) { if (e.target === dsheet) closeFolder(); });
 
-    /* About headline — a warm spotlight of colour follows the cursor */
-    var spot = document.getElementById("aboutSpotlight");
-    if (spot) {
+    /* Page headlines — a warm spotlight of colour follows the cursor */
+    [].slice.call(document.querySelectorAll(".spotlight")).forEach(function (spot) {
       spot.addEventListener("pointermove", function (e) {
         if (e.pointerType !== "mouse") return;
         var r = spot.getBoundingClientRect();
@@ -2056,7 +2285,7 @@
         spot.style.removeProperty("--sx");
         spot.style.removeProperty("--sy");
       });
-    }
+    });
 
     /* Design — vertical carousel. The card in the centre is "active"; clicking it
        grows it into a scrollable panel that carries the description text. */
@@ -2076,6 +2305,7 @@
       var dexpCat = document.getElementById("dexpCat");
       var dexpText = document.getElementById("dexpText");
       var dexpExtra = document.getElementById("dexpExtra");
+      var dexpTools = document.getElementById("dexpTools");
       var dexpClose = document.getElementById("dexpClose");
       var activeI = 0, bioT, scrollBlurT, closeT;
 
@@ -2130,8 +2360,25 @@
             dexpImgs.classList.remove("dexp__imgs--pair");
           }
         }
-        dexpCat.textContent = c.getAttribute("data-cat") || "";
-        dexpText.textContent = c.getAttribute("data-text") || "";
+        dexpCat.textContent = getLocalized(c, "data-cat");
+        dexpText.textContent = getLocalized(c, "data-text");
+        if (dexpTools) {
+          dexpTools.innerHTML = "";
+          var toolsAttr = c.getAttribute("data-tools");
+          if (toolsAttr) {
+            toolsAttr.split("·").forEach(function (tool) {
+              tool = tool.trim();
+              if (!tool) return;
+              var pill = document.createElement("span");
+              pill.className = "tool-pill";
+              pill.textContent = tool;
+              dexpTools.appendChild(pill);
+            });
+            dexpTools.hidden = false;
+          } else {
+            dexpTools.hidden = true;
+          }
+        }
         if (dexpExtra) {
           dexpExtra.innerHTML = "";
           var extraAttr = c.getAttribute("data-extra");
@@ -2161,7 +2408,7 @@
         }
         if (dexpScroll) dexpScroll.scrollTop = 0;
         if (dcarCol) dcarCol.classList.add("is-open");
-        swapBio(c.getAttribute("data-title") || "", c.getAttribute("data-cat") || "", "Nach unten scrollen");
+        swapBio(c.getAttribute("data-title") || "", getLocalized(c, "data-cat"), t("Nach unten scrollen"));
         if (dexpClose) dexpClose.focus();
       }
 
@@ -2174,7 +2421,7 @@
           dexp.classList.remove("is-closing");
         }, 440);
         if (dcarCol) dcarCol.classList.remove("is-open");
-        swapBio("Lynn Schmid", "Designs", "Arbeit anklicken");
+        swapBio("Lynn Schmid", "Designs", t("Arbeit anklicken"));
         if (dcards[activeI]) dcards[activeI].scrollIntoView({ block: "center" });
       }
 
@@ -2208,7 +2455,62 @@
         }, { root: dcar, rootMargin: "-46% 0px -46% 0px", threshold: 0 });
         dcards.forEach(function (c) { dio.observe(c); });
       }
+
+      refreshDesignLang = function () {
+        if (dexp && !dexp.hidden) {
+          openCard(activeI);
+        } else {
+          if (dbioRole) dbioRole.textContent = "Designs";
+          if (dbioHint) dbioHint.textContent = t("Arbeit anklicken");
+        }
+      };
     }
+
+    /* Custom cursor — a dot that tracks the pointer exactly and a
+       lagging ring that grows and turns accent-coloured over anything
+       interactive. Skipped on touch devices and for reduced motion. */
+    (function () {
+      var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!fine || reduceMotion) return;
+
+      var dot = document.createElement("div");
+      dot.className = "cursor--dot";
+      dot.setAttribute("aria-hidden", "true");
+      var ring = document.createElement("div");
+      ring.className = "cursor--ring";
+      ring.setAttribute("aria-hidden", "true");
+      dot.style.transform = "translate(-100px, -100px) translate(-50%, -50%)";
+      ring.style.transform = "translate(-100px, -100px) translate(-50%, -50%)";
+      document.body.appendChild(dot);
+      document.body.appendChild(ring);
+      document.body.classList.add("cursor-ready");
+
+      var mouseX = -100, mouseY = -100, ringX = -100, ringY = -100, raf = null;
+      function tick() {
+        ringX += (mouseX - ringX) * 0.18;
+        ringY += (mouseY - ringY) * 0.18;
+        ring.style.transform = "translate(" + ringX + "px, " + ringY + "px) translate(-50%, -50%)";
+        if (Math.abs(mouseX - ringX) > 0.3 || Math.abs(mouseY - ringY) > 0.3) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          raf = null;
+        }
+      }
+      document.addEventListener("mousemove", function (e) {
+        mouseX = e.clientX; mouseY = e.clientY;
+        dot.style.transform = "translate(" + mouseX + "px, " + mouseY + "px) translate(-50%, -50%)";
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      var hoverSelector = "a, button, [role='button'], input, textarea, select, label, .slide, .dcard, .gallery__item, .dsheet__item";
+      document.addEventListener("mouseover", function (e) {
+        if (e.target.closest && e.target.closest(hoverSelector)) document.body.classList.add("cursor-hover");
+      });
+      document.addEventListener("mouseout", function (e) {
+        if (e.target.closest && e.target.closest(hoverSelector)) document.body.classList.remove("cursor-hover");
+      });
+    })();
 
     /* everything is wired — now route + reveal the intro */
     render();
