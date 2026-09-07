@@ -440,7 +440,7 @@
   .slide__close:hover { background: rgba(11, 11, 11, .8); }
   .slide__media.is-playing .slide__close { display: flex; }
   .slide__meta {
-    margin-bottom: clamp(1rem, 2.2vw, 1.4rem);
+    margin-top: clamp(1.2rem, 2.6vw, 1.8rem);
     padding-bottom: clamp(.7rem, 1.6vw, 1rem);
     border-bottom: 1px solid var(--line);
   }
@@ -1345,7 +1345,7 @@
 
               <article class="dcard"
                 data-title="JetSetGo"
-                data-cat="Branding · ÜK-Modul 272" data-cat-en="Branding · ÜK module 272"
+                data-cat="Branding&nbsp;· ÜK-Modul 272" data-cat-en="Branding&nbsp;· ÜK module 272"
                 data-text="Im ÜK Modul 272 durfte ich eine fiktive Marke von Grund auf aufbauen, das Reisebüro JetSetGo. Dafür habe ich ein komplettes Branding inklusive Corporate Identity/Corporate Design entwickelt. Logo und zwei Werbeflyer stammen komplett von mir. Gearbeitet habe ich mit InDesign und Illustrator und konnte mir dabei einige neue Skills aneignen."
                 data-text-en="In ÜK module 272, I got to build a fictional brand from scratch: the travel agency JetSetGo. For this, I developed a complete branding package including corporate identity/corporate design. The logo and two promotional flyers are entirely my own work. I worked with InDesign and Illustrator and picked up several new skills along the way."
                 data-extra="design/printprodukt-logo-jetsetgo.webp|Logo JetSetGo"
@@ -1392,9 +1392,10 @@
 
               <article class="dcard"
                 data-title="Data Literacy"
-                data-cat="Charakterdesign · Team Motion" data-cat-en="Character Design · Team Motion"
+                data-cat="Charakterdesign&nbsp;· Team Motion" data-cat-en="Character Design&nbsp;· Team Motion"
                 data-text="Ich durfte für das Team Motion im Rahmen eines Auftrags zum Thema Data Literacy die Hauptfigur designen und illustrieren."
-                data-text-en="For an assignment on the topic of data literacy, I got to design and illustrate the main character for the Motion team.">
+                data-text-en="For an assignment on the topic of data literacy, I got to design and illustrate the main character for the Motion team."
+                data-tools="Illustrator">
                 <img src="design/charakter-data-literacy.webp" alt="Charakter-Illustration Data Literacy" data-fit="contain">
               </article>
 
@@ -1666,8 +1667,10 @@
     })();
 
     /* ---- intro (reference 1:1): clip video starts full-screen, eases DOWN into
-           its slot. Words stay put and are uncovered. One video, scale-down only. ---- */
-    (function () {
+           its slot. Words stay put and are uncovered. One video, scale-down only.
+           Wrapped in playIntro() so it can be re-triggered (clicking "LS" replays
+           it from the start) instead of only ever running once at page load. ---- */
+    var playIntro = (function () {
       var root = document.documentElement;
       var navEl = document.querySelector(".nav");
       var start = sections.start;
@@ -1675,160 +1678,182 @@
       var nameEl = start ? start.querySelector(".home__name") : null;
       var clip = nameEl ? nameEl.querySelector(".home__clip") : null;
       var vid = clip ? clip.querySelector("video") : null;
-      var onHome = (routeMap[current()] || {}).page === "start";
+      var w1 = nameEl ? nameEl.children[0] : null;
+      var w2 = nameEl ? nameEl.children[2] : null;
+      var runToken = 0;
+      var activeFinish = null;
 
       root.classList.add("home-ready");
-      if (!nameEl || !clip || !vid || introReduced || !onHome) return;
+      window.addEventListener("resize", function () { if (activeFinish) activeFinish(); });
 
-      var r = clip.getBoundingClientRect();
-      if (!r.width || !r.height) return;           // layout not ready → no effect
+      function run(attempts) {
+        if (!nameEl || !clip || !vid || introReduced) return;
+        var r = clip.getBoundingClientRect();
+        if (!r.width || !r.height) {
+          // slot not laid out / visible yet (e.g. navigation still settling) — retry briefly
+          if ((attempts || 0) < 30) requestAnimationFrame(function () { run((attempts || 0) + 1); });
+          return;
+        }
+        var myToken = ++runToken; // supersede any run already in flight
 
-      var SLOW = /[?&]slow(=(\d+))?/.exec(location.search);
-      SLOW = SLOW ? (parseInt(SLOW[2], 10) || 6) : 1;
-      var HOLD = 160 * SLOW, DUR = 850 * SLOW;
-      // speed-ramp: race through the "back turned" opening, then drop to real time
-      // right as she spins round laughing — and shrink shortly after
-      var RAMP_RATE = 2.8;   // playback speed for the opening
-      var RAMP_UNTIL = 2.0;  // clip seconds — she starts turning here
-      var TURN_AT = 3.2;     // clip seconds — we've seen her laugh, now shrink
-      var MAX_BLUR = 14, BLUR_FACTOR = 1.4;
-      var BASE_FILTER = "grayscale(1) contrast(1.06) brightness(.98)";
-      vid.style.filter = BASE_FILTER;      // set inline right away — no gap where only the (slower-applying) stylesheet rule covers it
-      var play = function () { var p = vid.play(); if (p && p.catch) p.catch(function () {}); };
-      vid.muted = true;
-      try { vid.playbackRate = RAMP_RATE; } catch (e) {}
-      play();
+        var SLOW = /[?&]slow(=(\d+))?/.exec(location.search);
+        SLOW = SLOW ? (parseInt(SLOW[2], 10) || 6) : 1;
+        var HOLD = 160 * SLOW, DUR = 850 * SLOW;
+        // speed-ramp: race through the "back turned" opening, then drop to real time
+        // right as she spins round laughing — and shrink shortly after
+        var RAMP_RATE = 2.8;   // playback speed for the opening
+        var RAMP_UNTIL = 2.0;  // clip seconds — she starts turning here
+        var TURN_AT = 3.2;     // clip seconds — we've seen her laugh, now shrink
+        var MAX_BLUR = 14, BLUR_FACTOR = 1.4;
+        var BASE_FILTER = "grayscale(1) contrast(1.06) brightness(.98)";
+        vid.style.filter = BASE_FILTER;      // set inline right away — no gap where only the (slower-applying) stylesheet rule covers it
+        var play = function () { var p = vid.play(); if (p && p.catch) p.catch(function () {}); };
+        vid.muted = true;
+        try { vid.currentTime = 0; } catch (e) {}   // replay from the start every time
+        try { vid.playbackRate = RAMP_RATE; } catch (e) {}
+        play();
 
-      // The video is laid out at a fixed FULL-SCREEN box (slot aspect, covers the
-      // viewport). Then a rAF loop eases a transform (translate + scale) that carries
-      // the box's centre onto the slot's centre and shrinks it to the slot's size.
-      // The slot rect is re-read EVERY frame, so any late layout drift (fonts, svh…)
-      // is absorbed continuously and the video lands pixel-exact — no hand-off jump.
-      var box = { w: 0, h: 0, cx: 0, cy: 0 };
-      function layoutBox() {
-        var b = clip.getBoundingClientRect();
-        var vw = window.innerWidth, vh = window.innerHeight;
-        var ar = b.width / b.height;
-        var cx = b.left + b.width / 2, cy = b.top + b.height / 2;
-        var needW = 2 * Math.max(cx, vw - cx) * 1.04;
-        var needH = 2 * Math.max(cy, vh - cy) * 1.04;
-        var boxW = Math.max(needW, needH * ar);
-        var boxH = boxW / ar;
-        if (boxH < needH) { boxH = needH; boxW = boxH * ar; }
-        box.w = boxW; box.h = boxH; box.cx = cx; box.cy = cy;
-        vid.style.transition = "none";
-        vid.style.left = (cx - boxW / 2) + "px";
-        vid.style.top = (cy - boxH / 2) + "px";
-        vid.style.width = boxW + "px";
-        vid.style.height = boxH + "px";
-      }
+        // The video is laid out at a fixed FULL-SCREEN box (slot aspect, covers the
+        // viewport). Then a rAF loop eases a transform (translate + scale) that carries
+        // the box's centre onto the slot's centre and shrinks it to the slot's size.
+        // The slot rect is re-read EVERY frame, so any late layout drift (fonts, svh…)
+        // is absorbed continuously and the video lands pixel-exact — no hand-off jump.
+        var box = { w: 0, h: 0, cx: 0, cy: 0 };
+        function layoutBox() {
+          var b = clip.getBoundingClientRect();
+          var vw = window.innerWidth, vh = window.innerHeight;
+          var ar = b.width / b.height;
+          var cx = b.left + b.width / 2, cy = b.top + b.height / 2;
+          var needW = 2 * Math.max(cx, vw - cx) * 1.04;
+          var needH = 2 * Math.max(cy, vh - cy) * 1.04;
+          var boxW = Math.max(needW, needH * ar);
+          var boxH = boxW / ar;
+          if (boxH < needH) { boxH = needH; boxW = boxH * ar; }
+          box.w = boxW; box.h = boxH; box.cx = cx; box.cy = cy;
+          vid.style.transition = "none";
+          vid.style.left = (cx - boxW / 2) + "px";
+          vid.style.top = (cy - boxH / 2) + "px";
+          vid.style.width = boxW + "px";
+          vid.style.height = boxH + "px";
+        }
 
-      root.classList.add("intro");
-      navEl && (navEl.style.opacity = "0");
-      footEl && (footEl.style.opacity = "0");
-      vid.style.transform = "none";
-      // typography: the two name halves wait OFF-SCREEN and slide in from the left
-      // and right once the video has shrunk small. NB: only the spans may be
-      // transformed — transforming .home__name would make it the containing block
-      // for the position:fixed video and throw it off-screen.
-      var w1 = nameEl.children[0], w2 = nameEl.children[2];
-      if (w1 && w2) {
-        w1.style.transition = w2.style.transition = "none";
-        w1.style.transform = "translateX(-52vw)";
-        w2.style.transform = "translateX(52vw)";
-      }
-      layoutBox();
-
-      var finished = false;
-      function finish() {
-        if (finished) return;
-        finished = true;
-        vid.style.transition = "none";
-        vid.style.position = ""; vid.style.left = ""; vid.style.top = "";
-        vid.style.width = ""; vid.style.height = "";
-        vid.style.transform = ""; vid.style.zIndex = ""; vid.style.filter = "";
+        root.classList.add("intro");
+        navEl && (navEl.style.opacity = "0");
+        footEl && (footEl.style.opacity = "0");
+        vid.style.transform = "none";
+        // typography: the two name halves wait OFF-SCREEN and slide in from the left
+        // and right once the video has shrunk small. NB: only the spans may be
+        // transformed — transforming .home__name would make it the containing block
+        // for the position:fixed video and throw it off-screen.
         if (w1 && w2) {
           w1.style.transition = w2.style.transition = "none";
-          w1.style.transform = w2.style.transform = "";
-          void nameEl.offsetWidth;
-          w1.style.transition = w2.style.transition = "";
+          w1.style.transform = "translateX(-52vw)";
+          w2.style.transform = "translateX(52vw)";
         }
-        root.classList.remove("intro");
-        play();
+        layoutBox();
+
+        var finished = false;
+        function finish() {
+          if (finished || myToken !== runToken) return;
+          finished = true;
+          vid.style.transition = "none";
+          vid.style.position = ""; vid.style.left = ""; vid.style.top = "";
+          vid.style.width = ""; vid.style.height = "";
+          vid.style.transform = ""; vid.style.zIndex = ""; vid.style.filter = "";
+          if (w1 && w2) {
+            w1.style.transition = w2.style.transition = "none";
+            w1.style.transform = w2.style.transform = "";
+            void nameEl.offsetWidth;
+            w1.style.transition = w2.style.transition = "";
+          }
+          root.classList.remove("intro");
+          play();
+          if (activeFinish === finish) activeFinish = null;
+        }
+        activeFinish = finish;
+
+        function easeInOutCubic(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+        // rate of change of the ease curve itself — naturally 0 at both ends, peak
+        // at the midpoint, so the blur it drives fades in/out cleanly with no jitter
+        function easeInOutCubicVel(t) { return t < .5 ? 12 * t * t : 3 * Math.pow(-2 * t + 2, 2); }
+
+        // text slides in as soon as the video is "small enough" (still finishing
+        // its last bit of shrink underneath) rather than waiting for a full stop
+        var TEXT_DUR = Math.round(DUR * 0.5);
+        var TEXT_START_E = 0.72;
+        var textStarted = false;
+        function revealText() {
+          if (textStarted || myToken !== runToken) return;
+          textStarted = true;
+          footEl && (footEl.style.opacity = "");
+          if (w1 && w2) {
+            var te = "transform " + TEXT_DUR + "ms cubic-bezier(.22,1,.32,1)";
+            w1.style.transition = w2.style.transition = te;
+            w1.style.transform = w2.style.transform = "translateX(0)";
+          }
+          navEl && (navEl.style.opacity = "");
+          setTimeout(finish, TEXT_DUR + 40);
+        }
+
+        var started = false;
+        function runAnim() {
+          if (started || myToken !== runToken) return;
+          started = true;
+          layoutBox();                                       // fresh full-screen box (fonts settled)
+          var t0 = performance.now();
+          (function frame(now) {
+            if (finished || myToken !== runToken) return;
+            var p = Math.min(1, (now - t0) / DUR);
+            var e = easeInOutCubic(p);
+            var b = clip.getBoundingClientRect();          // re-read the slot every frame
+            var slotCx = b.left + b.width / 2, slotCy = b.top + b.height / 2;
+            var targetScl = b.width / box.w;
+            var scl = 1 + (targetScl - 1) * e;
+            var cx = box.cx + (slotCx - box.cx) * e;
+            var cy = box.cy + (slotCy - box.cy) * e;
+            vid.style.transform = "translate(" + (cx - box.cx) + "px," + (cy - box.cy) + "px) scale(" + scl + ")";
+
+            // blur driven by the ease curve's own velocity — 0 at both ends, peak
+            // at the midpoint, so it fades in/out cleanly instead of following
+            // noisy per-frame layout deltas
+            var vel = easeInOutCubicVel(p) / DUR;
+            var sizeVel = Math.abs(targetScl - 1) * box.w * vel;
+            var moveVel = Math.hypot(slotCx - box.cx, slotCy - box.cy) * vel;
+            var blurPx = Math.min(MAX_BLUR, (sizeVel + moveVel) * BLUR_FACTOR);
+            vid.style.filter = BASE_FILTER + (blurPx > 0.4 ? " blur(" + blurPx.toFixed(1) + "px)" : "");
+
+            if (!textStarted && e >= TEXT_START_E) revealText();
+
+            if (p < 1) requestAnimationFrame(frame);
+            else if (!textStarted) revealText();
+          })(t0);
+        }
+
+        // stay full-screen until she has turned around in the footage, THEN shrink
+        var kicked = false;
+        function kick() { if (kicked || finished || myToken !== runToken) return; kicked = true; runAnim(); }
+        (function watchTurn() {
+          if (kicked || myToken !== runToken) return;
+          if (vid.playbackRate !== 1 && vid.currentTime >= RAMP_UNTIL) {
+            try { vid.playbackRate = 1; } catch (e) {}   // back to real time — here she comes
+          }
+          if (vid.currentTime >= TURN_AT) kick();
+          else requestAnimationFrame(watchTurn);
+        })();
+        setTimeout(kick, HOLD + (RAMP_UNTIL / RAMP_RATE + (TURN_AT - RAMP_UNTIL)) * 1000 + 2500); // fallback if playback never advances
+        setTimeout(finish, HOLD + TURN_AT * 1000 + DUR + TEXT_DUR + 3200); // safety net
       }
 
-      function easeInOutCubic(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-      // rate of change of the ease curve itself — naturally 0 at both ends, peak
-      // at the midpoint, so the blur it drives fades in/out cleanly with no jitter
-      function easeInOutCubicVel(t) { return t < .5 ? 12 * t * t : 3 * Math.pow(-2 * t + 2, 2); }
-
-      // text slides in as soon as the video is "small enough" (still finishing
-      // its last bit of shrink underneath) rather than waiting for a full stop
-      var TEXT_DUR = Math.round(DUR * 0.5);
-      var TEXT_START_E = 0.72;
-      var textStarted = false;
-      function revealText() {
-        if (textStarted) return;
-        textStarted = true;
-        footEl && (footEl.style.opacity = "");
-        if (w1 && w2) {
-          var te = "transform " + TEXT_DUR + "ms cubic-bezier(.22,1,.32,1)";
-          w1.style.transition = w2.style.transition = te;
-          w1.style.transform = w2.style.transform = "translateX(0)";
-        }
-        navEl && (navEl.style.opacity = "");
-        setTimeout(finish, TEXT_DUR + 40);
-      }
-
-      var started = false;
-      function run() {
-        if (started) return;
-        started = true;
-        layoutBox();                                       // fresh full-screen box (fonts settled)
-        var t0 = performance.now();
-        (function frame(now) {
-          if (finished) return;
-          var p = Math.min(1, (now - t0) / DUR);
-          var e = easeInOutCubic(p);
-          var b = clip.getBoundingClientRect();          // re-read the slot every frame
-          var slotCx = b.left + b.width / 2, slotCy = b.top + b.height / 2;
-          var targetScl = b.width / box.w;
-          var scl = 1 + (targetScl - 1) * e;
-          var cx = box.cx + (slotCx - box.cx) * e;
-          var cy = box.cy + (slotCy - box.cy) * e;
-          vid.style.transform = "translate(" + (cx - box.cx) + "px," + (cy - box.cy) + "px) scale(" + scl + ")";
-
-          // blur driven by the ease curve's own velocity — 0 at both ends, peak
-          // at the midpoint, so it fades in/out cleanly instead of following
-          // noisy per-frame layout deltas
-          var vel = easeInOutCubicVel(p) / DUR;
-          var sizeVel = Math.abs(targetScl - 1) * box.w * vel;
-          var moveVel = Math.hypot(slotCx - box.cx, slotCy - box.cy) * vel;
-          var blurPx = Math.min(MAX_BLUR, (sizeVel + moveVel) * BLUR_FACTOR);
-          vid.style.filter = BASE_FILTER + (blurPx > 0.4 ? " blur(" + blurPx.toFixed(1) + "px)" : "");
-
-          if (!textStarted && e >= TEXT_START_E) revealText();
-
-          if (p < 1) requestAnimationFrame(frame);
-          else if (!textStarted) revealText();
-        })(t0);
-      }
-
-      // stay full-screen until she has turned around in the footage, THEN shrink
-      var kicked = false;
-      function kick() { if (kicked || finished) return; kicked = true; run(); }
-      (function watchTurn() {
-        if (kicked) return;
-        if (vid.playbackRate !== 1 && vid.currentTime >= RAMP_UNTIL) {
-          try { vid.playbackRate = 1; } catch (e) {}   // back to real time — here she comes
-        }
-        if (vid.currentTime >= TURN_AT) kick();
-        else requestAnimationFrame(watchTurn);
-      })();
-      setTimeout(kick, HOLD + (RAMP_UNTIL / RAMP_RATE + (TURN_AT - RAMP_UNTIL)) * 1000 + 2500); // fallback if playback never advances
-      setTimeout(finish, HOLD + TURN_AT * 1000 + DUR + TEXT_DUR + 3200); // safety net
-      window.addEventListener("resize", function () { if (!finished) finish(); });
+      return run;
     })();
+
+    var onHome0 = (routeMap[current()] || {}).page === "start";
+    if (onHome0) playIntro();
+
+    var navMarkLink = document.querySelector(".nav__mark");
+    if (navMarkLink) {
+      navMarkLink.addEventListener("click", function () { playIntro(); });
+    }
 
     /* ================= ARBEITEN — exhibition ================= */
     var work = sections.arbeiten;
